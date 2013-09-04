@@ -12,17 +12,18 @@ describe OmniAuth::Strategies::Zyncro do
     end
 
     it 'should have correct site' do
-      expect(subject.options.client_options.site).to eq('https://api.zyncro.com')
+      expect(subject.options.client_options.site).to eq('https://my.sandbox.zyncro.com')
     end
 
     it 'should have correct authorize url' do
-      expect(subject.options.client_options.authorize_path).to eq('/oauth/authenticate')
+      expect(subject.options.client_options.authorize_path).to eq('/tokenservice/jsps/login/login.jsp')
     end
   end
 
   describe 'image_size option' do
     context 'when user has an image' do
       it 'should return image with size specified' do
+        pending
         @options = { :image_size => 'original' }
         subject.stub(:raw_info).and_return(
           { 'profile_image_url' => 'http://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_normal.png' }
@@ -31,6 +32,7 @@ describe OmniAuth::Strategies::Zyncro do
       end
 
       it 'should return secure image with size specified' do
+        pending
         @options = { :secure_image_url => 'true', :image_size => 'mini' }
         subject.stub(:raw_info).and_return(
           { 'profile_image_url_https' => 'https://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_normal.png' }
@@ -39,6 +41,7 @@ describe OmniAuth::Strategies::Zyncro do
       end
 
       it 'should return normal image by default' do
+        pending
         subject.stub(:raw_info).and_return(
           { 'profile_image_url' => 'http://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_normal.png' }
         )
