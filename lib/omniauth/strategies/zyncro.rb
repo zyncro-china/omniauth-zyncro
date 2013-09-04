@@ -5,9 +5,11 @@ module OmniAuth
   module Strategies
     class Zyncro < OmniAuth::Strategies::OAuth
       option :name, 'zyncro'
-      option :client_options, {:authorize_path => '/oauth/authenticate',
-                               :site => 'https://api.zyncro.com',
-                               :proxy => ENV['http_proxy'] ? URI(ENV['http_proxy']) : nil}
+      option :client_options, {
+                     :authorize_path => '/tokenservice/jsps/login/login.jsp',
+                     :request_token_path => '/oauth/v1/get_request_token',
+                     :site => 'https://my.sandbox.zyncro.com',
+                     :proxy => ENV['http_proxy'] ? URI(ENV['http_proxy']) : nil}
 
       uid { access_token.params[:user_id] }
 
@@ -55,7 +57,7 @@ module OmniAuth
         end
 
         if session['omniauth.params'] && session['omniauth.params']["use_authorize"] == "true"
-          options.client_options.authorize_path = '/oauth/authorize'
+          options.client_options.authorize_path = '/tokenservice/jsps/login/login.jsp',
         else
           options.client_options.authorize_path = '/oauth/authenticate'
         end
