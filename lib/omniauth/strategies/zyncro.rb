@@ -7,7 +7,8 @@ module OmniAuth
       option :name, 'zyncro'
       option :client_options, {
                      :authorize_path => '/tokenservice/jsps/login/login.jsp',
-                     :request_token_path => '/oauth/v1/get_request_token',
+                     :request_token_path => '/tokenservice/oauth/v1/get_request_token',
+                     :access_token_path => '/tokenservice/oauth/v1/get_access_token',
                      :site => 'https://my.sandbox.zyncro.com',
                      :proxy => ENV['http_proxy'] ? URI(ENV['http_proxy']) : nil}
 
@@ -15,15 +16,15 @@ module OmniAuth
 
       info do
         {
-          :nickname => raw_info['screen_name'],
           :name => raw_info['name'],
-          :location => raw_info['location'],
-          :image => image_url(options),
-          :description => raw_info['description'],
-          :urls => {
-            'Website' => raw_info['url'],
-            'Zyncro' => "https://zyncro.com/#{raw_info['screen_name']}",
-          }
+          :lastname => raw_info['lastName'],
+          :email => raw_info['email']
+          #:image => image_url(options),
+          #:description => raw_info['description'],
+          #:urls => {
+          #  'Website' => raw_info['url'],
+          #  'Zyncro' => "https://zyncro.com/#{raw_info['screen_name']}",
+          #}
         }
       end
 
@@ -32,7 +33,7 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= MultiJson.load(access_token.get('/1.1/account/verify_credentials.json?include_entities=false&skip_status=true').body)
+        @raw_info ||= MultiJson.load(access_token.get('/api/v1/rest/users/profile').body)
       rescue ::Errno::ETIMEDOUT
         raise ::Timeout::Error
       end
@@ -57,9 +58,10 @@ module OmniAuth
         end
 
         if session['omniauth.params'] && session['omniauth.params']["use_authorize"] == "true"
-          options.client_options.authorize_path = '/tokenservice/jsps/login/login.jsp',
+          options.client_options.authorize_path = '/tokenservice/jsps/login/login.jsp'
         else
-          options.client_options.authorize_path = '/oauth/authenticate'
+          options.client_options.authorize_path = '/tokenservice/jsps/login/login.jsp'
+          options[:authorize_params].merge!(:oauth_callback => 'http://zyncro.dev:9292/auth/zyncro/callback')
         end
 
         old_request_phase
