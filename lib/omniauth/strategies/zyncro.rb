@@ -61,7 +61,8 @@ module OmniAuth
           options.client_options.authorize_path = '/tokenservice/jsps/login/login.jsp'
         else
           options.client_options.authorize_path = '/tokenservice/jsps/login/login.jsp'
-          options[:authorize_params].merge!(:oauth_callback => 'http://zyncro.dev:9292/auth/zyncro/callback')
+          #options[:authorize_params].merge!(:oauth_callback => 'http://zyncro.dev:9292/auth/zyncro/callback')
+          options[:authorize_params].merge!(:oauth_callback => options[:oauth_callback])
         end
 
         old_request_phase

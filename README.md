@@ -30,7 +30,9 @@ Next, tell OmniAuth about this provider. For a Rails app, your `config/initializ
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :zyncro, "CONSUMER_KEY", "CONSUMER_SECRET"
+  provider :zyncro, "CONSUMER_KEY", "CONSUMER_SECRET" {
+    :oauth_callback => 'http://zyncro.dev:9292/auth/zyncro/callback'  
+  }
 end
 ```
 
